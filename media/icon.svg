@@ -1,0 +1,29 @@
+<svg width="512" height="512" viewBox="0 0 512 512"
+     xmlns="http://www.w3.org/2000/svg" role="img" aria-label="agentage">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0c1018"/><stop offset="1" stop-color="#06080e"/>
+    </linearGradient>
+    <radialGradient id="vig" cx="50%" cy="45%" r="62%">
+      <stop offset="0" stop-color="#fff"/><stop offset="55%" stop-color="#fff"/>
+      <stop offset="100%" stop-color="#000"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="50%" cy="48%" r="50%">
+      <stop offset="0" stop-color="#f3a52b" stop-opacity="0.42"/>
+      <stop offset="55%" stop-color="#f3a52b" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#f3a52b" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="36" height="36" patternUnits="userSpaceOnUse">
+      <path d="M 36 0 L 0 0 0 36" fill="none" stroke="#443116" stroke-width="1.4"/>
+    </pattern>
+    <mask id="vmask"><rect width="512" height="512" fill="url(#vig)"/></mask>
+    <clipPath id="clip"><rect width="512" height="512" rx="104"/></clipPath>
+  </defs>
+  <g clip-path="url(#clip)">
+    <rect width="512" height="512" fill="url(#bg)"/>
+    <rect width="512" height="512" fill="url(#grid)" mask="url(#vmask)"/>
+    <rect width="512" height="512" fill="url(#glow)"/>
+    <g transform="translate(64,64) scale(1.5)"><path d="M143.8 33.7a13.2 13.2 0 00-23.6 0l-92.4 184.8a13.2 13.2 0 0015.4 18.6l66-18.9a13.2 13.2 0 009.5-12.7v-60.3a13.2 13.2 0 1126.4 0v60.3a13.2 13.2 0 009.6 12.7l66 18.9a13.2 13.2 0 0015.4-18.6l-92.3-184.8z" fill="#f3a52b"/></g>
+  </g>
+  <rect x="0.75" y="0.75" width="510.5" height="510.5" rx="103.5" fill="none" stroke="#f3a52b" stroke-opacity="0.20" stroke-width="1.5"/>
+</svg>
