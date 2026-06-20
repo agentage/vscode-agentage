@@ -9,6 +9,8 @@ vitest.config.*
 **/*.ts
 **/*.map
 media/*.svg
+media/demo.gif
+scripts/**
 .gitignore
 .github/**
 CONTRIBUTING.md

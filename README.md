@@ -7,7 +7,7 @@
 [![Installs](https://img.shields.io/visual-studio-marketplace/i/agentage.agentage-memory?label=installs)](https://marketplace.visualstudio.com/items?itemName=agentage.agentage-memory)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
-<!-- TODO: add media/demo.gif (sign in -> type -> open hit) and reference it here with an absolute https raw URL -->
+![Agentage: Search Memory in VS Code](https://github.com/agentage/vscode-memory/raw/master/media/demo.gif)
 
 This extension connects your editor to your **cloud memory over MCP** - the hosted Agentage Memory endpoint at `memory.agentage.io/mcp`, the same memory every AI you use already reads and writes. One sign-in, then search it from the command palette. No local copy, no API keys.
 
