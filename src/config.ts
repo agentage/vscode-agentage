@@ -1,11 +1,6 @@
 import * as vscode from 'vscode';
 
-export const SCHEME = 'agentage-memory';
-export const CLIENT_NAME = 'agentage Memory (VS Code)';
-
-// Read-only search needs only memory:read; offline_access keeps the refresh token.
-export const SCOPE = 'memory:read offline_access';
-
+/** The MCP endpoint registered with the editor's AI. Override to target a different stack. */
 export function getMcpUrl(): string {
   const configured = vscode.workspace
     .getConfiguration('agentage')

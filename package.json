@@ -1,7 +1,7 @@
 {
-  "name": "agentage-memory",
-  "displayName": "Agentage Memory",
-  "description": "Connect VS Code to your Agentage Memory in the cloud and search it over MCP.",
+  "name": "agentage",
+  "displayName": "Agentage",
+  "description": "Connect your editor's AI to your Agentage memory, over MCP.",
   "version": "0.0.1",
   "publisher": "agentage",
   "license": "MIT",
@@ -51,8 +51,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "agentage.searchMemory",
-        "title": "Search Memory",
+        "command": "agentage.connectEditor",
+        "title": "Connect Memory to this editor",
         "category": "Agentage"
       }
     ],
@@ -76,9 +76,6 @@
     "check-types": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest"
-  },
-  "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.29.0"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
