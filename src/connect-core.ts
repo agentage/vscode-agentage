@@ -5,6 +5,14 @@ export type Host = 'vscode' | 'cursor' | 'windsurf' | 'vscodium' | 'unknown';
 
 export const SERVER_ID = 'agentage-memory';
 
+/** Thrown when an existing config is non-empty but not parseable - so we never clobber it. */
+export class ConfigParseError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'ConfigParseError';
+  }
+}
+
 /** Branch on vscode.env.uriScheme (stable, lowercase), never appName. */
 export function detectHost(uriScheme: string): Host {
   switch (uriScheme) {
@@ -48,7 +56,10 @@ export function fileTarget(host: Host, home: string, url: string): FileTarget | 
   }
 }
 
-/** Strip // and block comments + trailing commas, string-aware so https:// in values survives. */
+/**
+ * Strip // and block comments + trailing commas, string-aware so a string value
+ * containing https:// or a literal ",}" / ",]" survives intact.
+ */
 export function stripJsonc(text: string): string {
   let out = '';
   let inStr = false;
@@ -80,12 +91,27 @@ export function stripJsonc(text: string): string {
       i++;
       continue;
     }
+    if (c === ',') {
+      // drop a trailing comma (only when the next non-space char closes a container)
+      let j = i + 1;
+      while (j < text.length && /\s/.test(text[j])) j++;
+      if (text[j] === '}' || text[j] === ']') continue;
+      out += c;
+      continue;
+    }
     out += c;
   }
-  return out.replace(/,(\s*[}\]])/g, '$1');
+  return out;
 }
 
-/** Merge our server entry into an existing (possibly JSONC) config, preserving siblings. */
+const isPlainObject = (v: unknown): v is Record<string, unknown> =>
+  typeof v === 'object' && v !== null && !Array.isArray(v);
+
+/**
+ * Merge our server entry into an existing (possibly JSONC) config, preserving siblings.
+ * Throws ConfigParseError when an existing non-empty file is not parseable or its shape
+ * is unexpected - the caller MUST NOT overwrite the file in that case (no data loss).
+ */
 export function mergeServer(
   existing: string | null,
   key: 'servers' | 'mcpServers',
@@ -94,17 +120,26 @@ export function mergeServer(
 ): string {
   let root: Record<string, unknown> = {};
   if (existing && existing.trim()) {
+    let parsed: unknown;
     try {
-      const parsed = JSON.parse(stripJsonc(existing));
-      if (parsed && typeof parsed === 'object') root = parsed as Record<string, unknown>;
+      parsed = JSON.parse(stripJsonc(existing));
     } catch {
-      root = {};
+      throw new ConfigParseError('existing config is not valid JSON/JSONC');
     }
+    if (!isPlainObject(parsed)) {
+      throw new ConfigParseError('existing config root is not an object');
+    }
+    root = parsed;
   }
-  const bag =
-    root[key] && typeof root[key] === 'object'
-      ? (root[key] as Record<string, unknown>)
-      : {};
+  const existingBag = root[key];
+  let bag: Record<string, unknown>;
+  if (existingBag === undefined) {
+    bag = {};
+  } else if (isPlainObject(existingBag)) {
+    bag = existingBag;
+  } else {
+    throw new ConfigParseError(`existing "${key}" is not an object`);
+  }
   bag[id] = entry;
   root[key] = bag;
   return JSON.stringify(root, null, 2) + '\n';

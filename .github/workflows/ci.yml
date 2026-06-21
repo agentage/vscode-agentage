@@ -18,3 +18,4 @@ jobs:
       - run: npm run check-types
       - run: npm test
       - run: npm run compile
+      - run: npx @vscode/vsce package --allow-missing-repository -o /tmp/agentage.vsix

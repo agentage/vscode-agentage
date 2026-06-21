@@ -48,6 +48,8 @@ The command registers `memory.agentage.io/mcp` (Streamable HTTP) with your edito
 
 VS Code (Copilot Agent mode), and via [Open VSX](https://open-vsx.org/extension/agentage/agentage): **Cursor, Windsurf, VSCodium**.
 
+One-click install needs VS Code **1.101+** (authenticated MCP); on older builds the command falls back to a copy-the-URL prompt. Cursor and Windsurf are version-independent (the command writes their MCP config file).
+
 ## Privacy
 
 The extension only writes the server URL into your editor's MCP config (or opens the install deeplink). It stores no tokens, collects no telemetry, and sends no data of its own. Sign-in and all memory access happen through your editor's own MCP client.

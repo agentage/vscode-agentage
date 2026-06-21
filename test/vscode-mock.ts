@@ -5,9 +5,10 @@ export const state = {
   uriScheme: 'vscode',
   mcpUrl: undefined as string | undefined,
   infoReturn: undefined as string | undefined,
+  errorReturn: undefined as string | undefined,
   openExternalReturn: true,
   infoMessages: [] as { message: string; items: string[] }[],
-  errorMessages: [] as string[],
+  errorMessages: [] as { message: string; items: string[] }[],
   openExternalCalls: [] as string[],
   clipboard: [] as string[],
   shownDocs: [] as string[],
@@ -17,6 +18,7 @@ export function __reset(): void {
   state.uriScheme = 'vscode';
   state.mcpUrl = undefined;
   state.infoReturn = undefined;
+  state.errorReturn = undefined;
   state.openExternalReturn = true;
   state.infoMessages = [];
   state.errorMessages = [];
@@ -30,9 +32,9 @@ export const window = {
     state.infoMessages.push({ message, items });
     return state.infoReturn;
   },
-  showErrorMessage: async (message: string) => {
-    state.errorMessages.push(message);
-    return undefined;
+  showErrorMessage: async (message: string, ...items: string[]) => {
+    state.errorMessages.push({ message, items });
+    return state.errorReturn;
   },
   showTextDocument: async (uri: { toString(): string }) => {
     state.shownDocs.push(uri.toString());

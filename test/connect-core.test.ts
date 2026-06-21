@@ -1,5 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { detectHost, fileTarget, stripJsonc, mergeServer } from '../src/connect-core';
+import {
+  detectHost,
+  fileTarget,
+  stripJsonc,
+  mergeServer,
+  ConfigParseError,
+} from '../src/connect-core';
 
 const URL = 'https://memory.agentage.io/mcp';
 
@@ -48,6 +54,10 @@ describe('stripJsonc', () => {
     }`);
     expect(JSON.parse(out)).toEqual({ a: 1, b: 2 });
   });
+  it('preserves a string value containing ",}" (no trailing-comma corruption)', () => {
+    const out = stripJsonc('{ "env": { "TOKEN": "ghp_x,}" }, }');
+    expect(JSON.parse(out).env.TOKEN).toBe('ghp_x,}');
+  });
 });
 
 describe('mergeServer', () => {
@@ -69,5 +79,18 @@ describe('mergeServer', () => {
     }`;
     const out = mergeServer(existing, 'mcpServers', 'agentage-memory', { url: URL });
     expect(JSON.parse(out).mcpServers['agentage-memory']).toEqual({ url: URL });
+  });
+  it('throws ConfigParseError on an unparseable non-empty file (never clobbers)', () => {
+    expect(() => mergeServer('{ "mcpServers": { broken', 'mcpServers', 'agentage-memory', { url: URL })).toThrow(
+      ConfigParseError
+    );
+  });
+  it('throws when the root or the servers key is not an object', () => {
+    expect(() => mergeServer('[1,2,3]', 'mcpServers', 'agentage-memory', { url: URL })).toThrow(
+      ConfigParseError
+    );
+    expect(() => mergeServer('{ "mcpServers": [] }', 'mcpServers', 'agentage-memory', { url: URL })).toThrow(
+      ConfigParseError
+    );
   });
 });

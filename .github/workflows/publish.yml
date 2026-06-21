@@ -16,6 +16,8 @@ jobs:
       - run: npm ci
       - run: npm run check-types
       - run: npm test
+      - name: Assert tag matches package.json version
+        run: test "v$(node -p "require('./package.json').version")" = "${GITHUB_REF_NAME}"
       - name: Publish to Open VSX (also produces the .vsix)
         id: ovsx
         uses: HaaLeo/publish-vscode-extension@v2

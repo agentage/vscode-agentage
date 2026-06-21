@@ -48,6 +48,29 @@ describe('connectEditor - VS Code', () => {
   });
 });
 
+describe('connectEditor - VSCodium', () => {
+  it('uses the vscodium mcp/install deeplink', async () => {
+    state.uriScheme = 'vscodium';
+    await connectEditor();
+    expect(state.openExternalCalls).toHaveLength(1);
+    expect(state.openExternalCalls[0]).toContain('vscodium:mcp/install?');
+  });
+});
+
+describe('connectEditor - corrupt existing config', () => {
+  it('does NOT overwrite an unparseable Cursor config (no data loss)', async () => {
+    state.uriScheme = 'cursor';
+    const file = path.join(home, '.cursor', 'mcp.json');
+    await fs.mkdir(path.dirname(file), { recursive: true });
+    const corrupt = '{ "mcpServers": { "other": { "url": "http://x" } '; // missing braces
+    await fs.writeFile(file, corrupt);
+    await connectEditor();
+    expect(await fs.readFile(file, 'utf8')).toBe(corrupt); // untouched
+    expect(state.errorMessages).toHaveLength(1);
+    expect(state.errorMessages[0].message).toContain('invalid JSON');
+  });
+});
+
 describe('connectEditor - unknown host', () => {
   it('hands the user the server URL to add manually', async () => {
     state.uriScheme = 'emacs';
