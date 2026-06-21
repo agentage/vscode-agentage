@@ -75,11 +75,14 @@
     "package": "node esbuild.js --production",
     "check-types": "tsc --noEmit",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:host": "npm run compile && vscode-test"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
     "@types/vscode": "^1.99.0",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1",
     "@vscode/vsce": "^3.9.2",
     "esbuild": "^0.24.0",
     "ovsx": "^0.10.11",
