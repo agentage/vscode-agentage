@@ -7,7 +7,7 @@
 [![Installs](https://img.shields.io/visual-studio-marketplace/i/agentage.agentage?label=installs)](https://marketplace.visualstudio.com/items?itemName=agentage.agentage)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
-![Copilot Chat answering from your Agentage memory through the MCP connection](https://github.com/agentage/vscode-memory/raw/master/media/demo.gif)
+![Copilot Chat answering from your Agentage memory through the MCP connection](https://github.com/agentage/vscode-agentage/raw/master/media/demo.gif)
 
 One command wires your editor's AI - GitHub Copilot, Cursor, or Windsurf - to your Agentage memory at `memory.agentage.io/mcp`. Ask in chat, and the agent reads and answers from the same memory every AI you use shares. No copy-paste, no local export.
 
