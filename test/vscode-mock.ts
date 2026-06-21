@@ -12,6 +12,9 @@ export const state = {
   openExternalCalls: [] as string[],
   clipboard: [] as string[],
   shownDocs: [] as string[],
+  mcpProviderId: undefined as string | undefined,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  mcpProvider: undefined as any,
 };
 
 export function __reset(): void {
@@ -25,6 +28,8 @@ export function __reset(): void {
   state.openExternalCalls = [];
   state.clipboard = [];
   state.shownDocs = [];
+  state.mcpProviderId = undefined;
+  state.mcpProvider = undefined;
 }
 
 export const window = {
@@ -70,4 +75,35 @@ export const Uri = {
 
 export const commands = {
   executeCommand: async () => undefined,
+};
+
+export class EventEmitter<T> {
+  private listeners: ((e: T) => void)[] = [];
+  event = (listener: (e: T) => void) => {
+    this.listeners.push(listener);
+    return { dispose: () => undefined };
+  };
+  fire(e: T): void {
+    for (const l of this.listeners) l(e);
+  }
+  dispose(): void {
+    this.listeners = [];
+  }
+}
+
+export class McpHttpServerDefinition {
+  constructor(
+    public label: string,
+    public uri: { toString(): string },
+    public headers?: Record<string, string>,
+    public version?: string
+  ) {}
+}
+
+export const lm = {
+  registerMcpServerDefinitionProvider: (id: string, provider: unknown) => {
+    state.mcpProviderId = id;
+    state.mcpProvider = provider;
+    return { dispose: () => undefined };
+  },
 };

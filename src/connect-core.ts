@@ -107,6 +107,24 @@ export function stripJsonc(text: string): string {
 const isPlainObject = (v: unknown): v is Record<string, unknown> =>
   typeof v === 'object' && v !== null && !Array.isArray(v);
 
+/** True if the config already contains our exact entry - lets auto-connect skip a rewrite. */
+export function hasServerEntry(
+  existing: string | null,
+  key: 'servers' | 'mcpServers',
+  id: string,
+  entry: Record<string, unknown>
+): boolean {
+  if (!existing || !existing.trim()) return false;
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(stripJsonc(existing));
+  } catch {
+    return false;
+  }
+  if (!isPlainObject(parsed) || !isPlainObject(parsed[key])) return false;
+  return JSON.stringify((parsed[key] as Record<string, unknown>)[id]) === JSON.stringify(entry);
+}
+
 /**
  * Merge our server entry into an existing (possibly JSONC) config, preserving siblings.
  * Throws ConfigParseError when an existing non-empty file is not parseable or its shape

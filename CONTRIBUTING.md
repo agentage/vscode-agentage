@@ -21,11 +21,14 @@ host editor's AI agent - it does not talk to MCP itself, and it has no runtime
 dependencies. The host editor runs OAuth 2.1 when its agent first uses the server.
 
 ```
-src/extension.ts      activate(): registers the one command
-src/connect-editor.ts host detection + register the server (VS Code deeplink / Cursor + Windsurf config file)
-src/connect-core.ts   pure helpers (host detect, per-editor JSON, JSONC-safe merge) - vitest-tested
+src/extension.ts      activate(): auto-register (provider + fork config) + the manual command
+src/mcp-provider.ts   VS Code native MCP provider (onStartupFinished) - server appears with no command
+src/connect-editor.ts the manual command + autoConnectForks (silent idempotent Cursor/Windsurf write)
+src/connect-core.ts   pure helpers (host detect, per-editor JSON, JSONC-safe merge, idempotency check) - vitest-tested
 src/config.ts         the agentage.mcpUrl setting
 ```
+
+Auto-install: VS Code is contributed via `contributes.mcpServerDefinitionProviders` + `registerMcpServerDefinitionProvider` (the id must match; activation is `onStartupFinished`). The forks have no such API, so the extension writes their config file directly.
 
 Per-editor config shapes differ - VS Code `servers` + `type:http` + `url`, Cursor
 `mcpServers` + `url`, Windsurf `mcpServers` + `serverUrl` - so existing config is

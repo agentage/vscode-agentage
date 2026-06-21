@@ -6,11 +6,37 @@ import {
   detectHost,
   fileTarget,
   mergeServer,
+  hasServerEntry,
   ConfigParseError,
   SERVER_ID,
   type Host,
 } from './connect-core';
 import { getMcpUrl } from './config';
+
+/**
+ * Best-effort, silent, idempotent auto-connect for Cursor / Windsurf on activation -
+ * writes their MCP config so the server is available without running a command. Skips if
+ * already present; never clobbers an unparseable config; swallows errors (startup path).
+ * VS Code is handled by the native MCP provider instead, so this no-ops there.
+ */
+export async function autoConnectForks(): Promise<void> {
+  const target = fileTarget(detectHost(vscode.env.uriScheme), os.homedir(), getMcpUrl());
+  if (!target) return;
+  try {
+    let existing: string | null = null;
+    try {
+      existing = await fs.readFile(target.file, 'utf8');
+    } catch {
+      // no file yet
+    }
+    if (hasServerEntry(existing, target.key, SERVER_ID, target.entry)) return;
+    const merged = mergeServer(existing, target.key, SERVER_ID, target.entry);
+    await fs.mkdir(dirname(target.file), { recursive: true });
+    await fs.writeFile(target.file, merged, 'utf8');
+  } catch {
+    // best-effort: a corrupt/locked config is left untouched; the command surfaces errors
+  }
+}
 
 const REPO_HELP = 'https://github.com/agentage/vscode-agentage#how-it-works';
 

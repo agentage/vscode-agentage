@@ -4,6 +4,7 @@ import {
   fileTarget,
   stripJsonc,
   mergeServer,
+  hasServerEntry,
   ConfigParseError,
 } from '../src/connect-core';
 
@@ -92,5 +93,25 @@ describe('mergeServer', () => {
     expect(() => mergeServer('{ "mcpServers": [] }', 'mcpServers', 'agentage-memory', { url: URL })).toThrow(
       ConfigParseError
     );
+  });
+});
+
+describe('hasServerEntry', () => {
+  it('true only when the exact entry is already present', () => {
+    const cfg = JSON.stringify({ mcpServers: { 'agentage-memory': { url: URL } } });
+    expect(hasServerEntry(cfg, 'mcpServers', 'agentage-memory', { url: URL })).toBe(true);
+  });
+  it('false for absent / different / null / corrupt', () => {
+    expect(hasServerEntry(null, 'mcpServers', 'agentage-memory', { url: URL })).toBe(false);
+    expect(hasServerEntry('{}', 'mcpServers', 'agentage-memory', { url: URL })).toBe(false);
+    expect(
+      hasServerEntry(
+        JSON.stringify({ mcpServers: { 'agentage-memory': { url: 'http://old' } } }),
+        'mcpServers',
+        'agentage-memory',
+        { url: URL }
+      )
+    ).toBe(false);
+    expect(hasServerEntry('{ broken', 'mcpServers', 'agentage-memory', { url: URL })).toBe(false);
   });
 });

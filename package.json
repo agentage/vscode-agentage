@@ -47,8 +47,16 @@
     "workspace"
   ],
   "main": "./dist/extension.js",
-  "activationEvents": [],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "contributes": {
+    "mcpServerDefinitionProviders": [
+      {
+        "id": "agentageMemory",
+        "label": "Agentage Memory"
+      }
+    ],
     "commands": [
       {
         "command": "agentage.connectEditor",

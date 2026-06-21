@@ -3,7 +3,7 @@ import * as fs from 'node:fs/promises';
 import * as os from 'node:os';
 import * as path from 'node:path';
 import { state, __reset } from './vscode-mock';
-import { connectEditor } from '../src/connect-editor';
+import { connectEditor, autoConnectForks } from '../src/connect-editor';
 
 const URL = 'https://memory.agentage.io/mcp';
 let home: string;
@@ -54,6 +54,40 @@ describe('connectEditor - VSCodium', () => {
     await connectEditor();
     expect(state.openExternalCalls).toHaveLength(1);
     expect(state.openExternalCalls[0]).toContain('vscodium:mcp/install?');
+  });
+});
+
+describe('autoConnectForks (silent install on activation)', () => {
+  it('writes the Cursor config silently and is idempotent', async () => {
+    state.uriScheme = 'cursor';
+    await autoConnectForks();
+    const file = path.join(home, '.cursor', 'mcp.json');
+    expect(JSON.parse(await fs.readFile(file, 'utf8')).mcpServers['agentage-memory']).toEqual({
+      url: URL,
+    });
+    const before = await fs.readFile(file, 'utf8');
+    await autoConnectForks(); // second run is a no-op
+    expect(await fs.readFile(file, 'utf8')).toBe(before);
+    expect(state.infoMessages).toHaveLength(0);
+    expect(state.errorMessages).toHaveLength(0);
+  });
+
+  it('no-ops on VS Code (the native provider handles it)', async () => {
+    state.uriScheme = 'vscode';
+    await autoConnectForks();
+    await expect(fs.readFile(path.join(home, '.cursor', 'mcp.json'), 'utf8')).rejects.toThrow();
+    expect(state.errorMessages).toHaveLength(0);
+  });
+
+  it('leaves a corrupt config untouched and stays silent', async () => {
+    state.uriScheme = 'windsurf';
+    const file = path.join(home, '.codeium', 'windsurf', 'mcp_config.json');
+    await fs.mkdir(path.dirname(file), { recursive: true });
+    const corrupt = '{ "mcpServers": { broken';
+    await fs.writeFile(file, corrupt);
+    await autoConnectForks();
+    expect(await fs.readFile(file, 'utf8')).toBe(corrupt);
+    expect(state.errorMessages).toHaveLength(0);
   });
 });
 
