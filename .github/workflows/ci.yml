@@ -17,5 +17,13 @@ jobs:
       - run: npm ci
       - run: npm run check-types
       - run: npm test
+      # Extension-host smoke in a real VS Code (headless via Xvfb).
+      - run: xvfb-run -a npm run test:host
       - run: npm run compile
       - run: npx @vscode/vsce package -o /tmp/agentage.vsix
+      # Hand the packaged .vsix to the e2e repo's `vscode` integration project.
+      - uses: actions/upload-artifact@v4
+        with:
+          name: agentage-vsix
+          path: /tmp/agentage.vsix
+          if-no-files-found: error
