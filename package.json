@@ -1,0 +1,100 @@
+{
+  "name": "agentage",
+  "displayName": "Agentage",
+  "description": "Connect your editor's AI to your Agentage memory, over MCP.",
+  "version": "0.0.1",
+  "publisher": "agentage",
+  "license": "MIT",
+  "icon": "media/icon.png",
+  "engines": {
+    "vscode": "^1.99.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "mcp",
+    "memory",
+    "search",
+    "ai",
+    "oauth",
+    "knowledge-base",
+    "notes",
+    "agentage"
+  ],
+  "galleryBanner": {
+    "color": "#f3a52b",
+    "theme": "dark"
+  },
+  "pricing": "Free",
+  "qna": false,
+  "homepage": "https://memory.agentage.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/agentage/vscode-agentage.git"
+  },
+  "bugs": {
+    "url": "https://github.com/agentage/vscode-agentage/issues"
+  },
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": true
+    },
+    "virtualWorkspaces": true
+  },
+  "extensionKind": [
+    "ui",
+    "workspace"
+  ],
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "mcpServerDefinitionProviders": [
+      {
+        "id": "agentageMemory",
+        "label": "Agentage Memory"
+      }
+    ],
+    "commands": [
+      {
+        "command": "agentage.connectEditor",
+        "title": "Connect Memory to this editor",
+        "category": "Agentage"
+      }
+    ],
+    "configuration": {
+      "title": "Agentage Memory",
+      "properties": {
+        "agentage.mcpUrl": {
+          "type": "string",
+          "default": "https://memory.agentage.io/mcp",
+          "markdownDescription": "Agentage Memory MCP endpoint (Streamable HTTP). Point at a different stack (e.g. dev) here.",
+          "order": 0
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "node esbuild.js",
+    "watch": "node esbuild.js --watch",
+    "package": "node esbuild.js --production",
+    "check-types": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:host": "npm run compile && vscode-test"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/vscode": "^1.99.0",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1",
+    "@vscode/vsce": "^3.9.2",
+    "esbuild": "^0.24.0",
+    "ovsx": "^0.10.11",
+    "typescript": "^5.7.0",
+    "vitest": "^2.1.0"
+  }
+}
