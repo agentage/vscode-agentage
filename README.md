@@ -49,7 +49,7 @@ On activation the extension registers `memory.agentage.io/mcp` (Streamable HTTP)
 
 ## Compatibility
 
-VS Code (Copilot Agent mode), and via [Open VSX](https://open-vsx.org/extension/agentage/agentage): **Cursor, Windsurf, VSCodium**.
+VS Code (Copilot Agent mode) and via [Open VSX](https://open-vsx.org/extension/agentage/agentage): **Cursor, Windsurf, VSCodium**.
 
 Auto-install needs VS Code **1.99+** (our minimum; the MCP provider API is stable from 1.99, authenticated MCP smoothest on 1.101+). Cursor and Windsurf are version-independent (the extension writes their MCP config file).
 
