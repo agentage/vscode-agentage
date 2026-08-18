@@ -3,6 +3,10 @@
 .vscode-test.mjs
 src/**
 test/**
+coverage/**
+eslint.config.mjs
+.prettierrc
+.prettierignore
 test-host/**
 node_modules/**
 esbuild.js

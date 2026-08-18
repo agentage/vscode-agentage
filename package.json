@@ -7,7 +7,8 @@
   "license": "MIT",
   "icon": "media/icon.png",
   "engines": {
-    "vscode": "^1.99.0"
+    "vscode": "^1.99.0",
+    "node": ">=22"
   },
   "categories": [
     "Other"
@@ -82,18 +83,31 @@
     "watch": "node esbuild.js --watch",
     "package": "node esbuild.js --production",
     "check-types": "tsc --noEmit",
+    "lint": "eslint src test",
+    "lint:fix": "eslint src test --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
     "test:watch": "vitest",
-    "test:host": "npm run compile && vscode-test"
+    "test:host": "npm run compile && vscode-test",
+    "verify": "npm run check-types && npm run lint && npm run format:check && npm run test:coverage && npm run compile"
   },
   "devDependencies": {
     "@types/node": "^26.2.0",
     "@types/vscode": "^1.99.0",
+    "@typescript-eslint/eslint-plugin": "^8.67.0",
+    "@typescript-eslint/parser": "^8.67.0",
+    "@vitest/coverage-v8": "^4.1.11",
     "@vscode/test-cli": "^0.0.15",
     "@vscode/test-electron": "^3.1.0",
     "@vscode/vsce": "^3.9.2",
     "esbuild": "^0.28.2",
+    "eslint": "^10.8.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.6",
     "ovsx": "^1.1.1",
+    "prettier": "^3.9.6",
     "typescript": "^5.7.0",
     "vitest": "^4.1.10"
   }

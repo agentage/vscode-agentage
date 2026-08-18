@@ -120,6 +120,8 @@ describe('connectEditor - respects agentage.mcpUrl override', () => {
     state.mcpUrl = 'https://memory.dev.agentage.io/mcp';
     await connectEditor();
     const obj = JSON.parse(await fs.readFile(path.join(home, '.cursor', 'mcp.json'), 'utf8'));
-    expect(obj.mcpServers['agentage-memory']).toEqual({ url: 'https://memory.dev.agentage.io/mcp' });
+    expect(obj.mcpServers['agentage-memory']).toEqual({
+      url: 'https://memory.dev.agentage.io/mcp',
+    });
   });
 });

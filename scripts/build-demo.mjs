@@ -12,8 +12,8 @@ const OUT = 'media/demo.gif';
 const CX = 512; // chat panel left edge
 const PAD = 18;
 const CL = CX + PAD; // content left
-const FS = "font-family=\"'DejaVu Sans',sans-serif\"";
-const FM = "font-family=\"'DejaVu Sans Mono',monospace\"";
+const FS = 'font-family="\'DejaVu Sans\',sans-serif"';
+const FM = 'font-family="\'DejaVu Sans Mono\',monospace"';
 
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const txt = (x, y, s, fill, str, extra = '') =>
