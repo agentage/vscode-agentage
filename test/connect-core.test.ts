@@ -64,7 +64,7 @@ describe('stripJsonc', () => {
 describe('mergeServer', () => {
   it('creates a fresh config when none exists', () => {
     const out = mergeServer(null, 'mcpServers', 'agentage-memory', { url: URL });
-    expect(JSON.parse(out)).toEqual({ 'mcpServers': { 'agentage-memory': { url: URL } } });
+    expect(JSON.parse(out)).toEqual({ mcpServers: { 'agentage-memory': { url: URL } } });
   });
   it('preserves sibling servers', () => {
     const existing = JSON.stringify({ mcpServers: { other: { url: 'http://x' } } });
@@ -82,17 +82,17 @@ describe('mergeServer', () => {
     expect(JSON.parse(out).mcpServers['agentage-memory']).toEqual({ url: URL });
   });
   it('throws ConfigParseError on an unparseable non-empty file (never clobbers)', () => {
-    expect(() => mergeServer('{ "mcpServers": { broken', 'mcpServers', 'agentage-memory', { url: URL })).toThrow(
-      ConfigParseError
-    );
+    expect(() =>
+      mergeServer('{ "mcpServers": { broken', 'mcpServers', 'agentage-memory', { url: URL })
+    ).toThrow(ConfigParseError);
   });
   it('throws when the root or the servers key is not an object', () => {
     expect(() => mergeServer('[1,2,3]', 'mcpServers', 'agentage-memory', { url: URL })).toThrow(
       ConfigParseError
     );
-    expect(() => mergeServer('{ "mcpServers": [] }', 'mcpServers', 'agentage-memory', { url: URL })).toThrow(
-      ConfigParseError
-    );
+    expect(() =>
+      mergeServer('{ "mcpServers": [] }', 'mcpServers', 'agentage-memory', { url: URL })
+    ).toThrow(ConfigParseError);
   });
 });
 

@@ -37,14 +37,14 @@ On activation the extension registers `memory.agentage.io/mcp` (Streamable HTTP)
 
 ## Settings
 
-| Setting | Default | Description |
-| --- | --- | --- |
+| Setting           | Default                          | Description                                                    |
+| ----------------- | -------------------------------- | -------------------------------------------------------------- |
 | `agentage.mcpUrl` | `https://memory.agentage.io/mcp` | The MCP endpoint to register. Point at a different stack here. |
 
 ## Commands
 
-| Command | What it does |
-| --- | --- |
+| Command                                   | What it does                                                       |
+| ----------------------------------------- | ------------------------------------------------------------------ |
 | `Agentage: Connect Memory to this editor` | Registers the MCP server so your editor's AI can read your memory. |
 
 ## Compatibility
